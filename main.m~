@@ -1,0 +1,68 @@
+%read txt.file
+close all;
+clc;
+clear;
+a=textread('data2.txt','%s')';
+long=length(a);
+number=floor((long-2)/4);
+raw_data=zeros(1,number);
+for num=0:number-1
+    raw_data_str=[a{1,3+num*4} a{1,4+num*4}];
+    raw_data(num+1)=hex2dec(raw_data_str);
+end
+
+% signal frequency spectrum
+fs=2500;
+Ndata=number;
+N=2^nextpow2(Ndata);
+n=0:Ndata-1;
+y=fft(raw_data,N);
+mag=abs(y);
+f=(0:N-1)*fs/N;
+subplot(221);
+plot(f(1:N/2),mag(1:N/2)*2/N);
+%----------------------高通滤波 
+p=wavefilter(rawdata,'db6',8,[1,2,3,4,5,6,7,8],0);
+
+
+
+
+% Hd=highpass;        %高通滤：去除4Hz以下频率
+
+
+
+
+
+
+
+% la=filter(Hd,la);      %l: 经过4Hz高通后的时域信号
+% lb=filter(Hd,lb);      %l: 经过4Hz高通后的时域信号
+% lc=filter(Hd,lc);      %l: 经过4Hz高通后的时域信号
+% ld=filter(Hd,ld);      %l: 经过4Hz高通后的时域信号
+% la=la(9000:N);
+% lb=lb(9000:N);
+% lc=lc(9000:N);
+% ld=ld(9000:N);
+% 
+% %l1=la+lc-2*lb;
+% l1=lb+ld-2*lc;
+% N=length(la);
+% t=(1:N)/fs;
+% f=(0:N-1)*fs/N;
+% Hwa=fft(la,N);
+% Hwb=fft(lb,N);
+% Hwc=fft(lc,N);
+% Hwd=fft(ld,N); 
+% figure(1)
+% subplot(2,1,1);   
+% plot(t,l1);      %原始时域信号
+% title('LDD空间滤波信号');
+% xlabel('时间/s');% 原始信号
+% ylabel('幅值/V');
+% grid on
+% subplot(2,1,2);   
+% plot(t,la)
+% title('任一单通道信号');
+% xlabel('时间/s');
+% ylabel('幅值/V');
+% grid on
